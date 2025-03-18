@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.ManyToAny;
 
+import address.Address;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
