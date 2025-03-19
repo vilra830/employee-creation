@@ -1,6 +1,5 @@
-package address;
+package io.nology.employee.address;
 
-import country.Country;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name="addresses")
 public class Address {
 
 @Id
@@ -25,10 +24,20 @@ private String city;
 
 private String zipCode;
 
+private State state;
 
-@ManyToOne
-@JoinColumn(name = "country_id")
-private Country country;
+public enum State {
+    NSW,
+    VIC,
+    ACT,
+    WA,
+    QLD,
+    TAS,
+    SA,
+    NT
+
+}
+
 
 
 public Long getId() {
@@ -80,14 +89,13 @@ public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
 }
 
-
-public Country getCountry() {
-    return country;
+public State getState() {
+    return state;
 }
 
-
-public void setCountry(Country country) {
-    this.country = country;
+public void setState(State state){
+    this.state = state;
+    
 }
 
 

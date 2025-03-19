@@ -1,4 +1,4 @@
-package country;
+package io.nology.employee.country;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

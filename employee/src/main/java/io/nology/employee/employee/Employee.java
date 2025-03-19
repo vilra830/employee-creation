@@ -1,10 +1,12 @@
-package employee;
+package io.nology.employee.employee;
 
 import java.time.LocalDate;
 
 import org.hibernate.annotations.ManyToAny;
 
-import address.Address;
+import io.nology.employee.address.Address;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,29 +14,37 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table()
+@Table(name="employees")
 public class Employee {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable=false)
     private String firstName;
 
+    @Column(nullable=false)
     private String lastName;
 
+    @Column(nullable=false)
     private String email;
 
+    @Column(nullable=false)
     private String phoneNumber;
 
-    @ManyToAny
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Column(nullable=false)
     private LocalDate startDate;
+
+    @Column()
     private LocalDate endDate;
     
     @Enumerated(EnumType.STRING)
