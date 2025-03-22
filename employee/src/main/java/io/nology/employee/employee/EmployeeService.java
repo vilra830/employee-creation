@@ -64,12 +64,12 @@ public class EmployeeService {
         }
 
         Employee existingEmployee = result.get();
+        
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(newEmployeeData, existingEmployee);
+        System.out.println("whats my data " + existingEmployee.getFirstName());
         return Optional.of(employeeRepository.save(existingEmployee));
-    
-       
     }
 
 }
