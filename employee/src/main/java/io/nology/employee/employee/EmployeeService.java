@@ -64,11 +64,37 @@ public class EmployeeService {
         }
 
         Employee existingEmployee = result.get();
-        
 
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.map(newEmployeeData, existingEmployee);
-        System.out.println("whats my data " + existingEmployee.getFirstName());
+        // ModelMapper modelMapper = new ModelMapper();
+        if (newEmployeeData.getFirstName() != null) {
+            existingEmployee.setFirstName(newEmployeeData.getFirstName());
+        }
+        if (newEmployeeData.getLastName() != null) {
+            existingEmployee.setLastName(newEmployeeData.getLastName());
+        }
+        if (newEmployeeData.getEmail() != null) {
+            existingEmployee.setEmail(newEmployeeData.getEmail());
+        }
+        if (newEmployeeData.getPhoneNumber() != null) {
+            existingEmployee.setPhoneNumber(newEmployeeData.getPhoneNumber());
+        }
+        if (newEmployeeData.getAddress() != null) {
+            existingEmployee.setAddress(newEmployeeData.getAddress());
+        }
+        if (newEmployeeData.getStartDate() != null) {
+            existingEmployee.setStartDate(newEmployeeData.getStartDate());
+        }
+        if (newEmployeeData.getEndDate() != null) {
+            existingEmployee.setEndDate(newEmployeeData.getEndDate());
+        }
+        if (newEmployeeData.getWorkSchedule() != null) {
+            existingEmployee.setWorkSchedule(newEmployeeData.getWorkSchedule());
+        }
+        if (newEmployeeData.getContracType() != null) {
+            existingEmployee.setContracType(newEmployeeData.getContracType());
+        }
+
+        // modelMapper.map(newEmployeeData, existingEmployee);
         return Optional.of(employeeRepository.save(existingEmployee));
     }
 
