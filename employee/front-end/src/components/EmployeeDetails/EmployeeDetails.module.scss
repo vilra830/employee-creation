@@ -1,0 +1,92 @@
+.employee-details {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.8rem;
+  }
+
+  .details-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section {
+    margin-bottom: 2rem;
+
+    h3 {
+      font-size: 1.2rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+  }
+
+  .detail-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .label {
+    font-weight: 600;
+    width: 150px;
+    color: #666;
+  }
+
+  .value {
+    flex: 1;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .back-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #333;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+
+  .edit-button {
+    background-color: #4a6db5;
+    border: 1px solid #3a5ca0;
+    color: white;
+
+    &:hover {
+      background-color: #3a5ca0;
+    }
+  }
+
+  .loading,
+  .error {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+  }
+
+  .error {
+    color: #d32f2f;
+  }
+}

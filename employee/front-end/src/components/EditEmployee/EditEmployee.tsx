@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import {
-  createEmployee,
+  getEmployeeById,
+  updateEmployee,
   clearErrors,
 } from "../../state/employee/employeeSlice";
-import styles from "./EmployeeForm.module.scss";
+import styles from "./EditEmployee.module.scss";
 
 import {
   Employee,
@@ -12,15 +14,17 @@ import {
   State,
   WorkSchedule,
   ContractType,
-  ValidationErrors,
 } from "../../types/employee.types";
 
-const EmployeeForm: React.FC = () => {
+const EditEmployee: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { status, error, validationErrors } = useAppSelector(
+  
+  const { currentEmployee, status, error, validationErrors } = useAppSelector(
     (state) => state.employees
   );
-
+  
   const [employee, setEmployee] = useState<Employee>({
     firstName: "",
     lastName: "",
@@ -37,7 +41,22 @@ const EmployeeForm: React.FC = () => {
     workSchedule: WorkSchedule.FULL_TIME,
     contractType: ContractType.PERMANENT,
   });
-
+  
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    if (id) {
+      dispatch(getEmployeeById(parseInt(id)));
+    }
+  }, [dispatch, id]);
+  
+  useEffect(() => {
+    // Populate form when current employee data is loaded
+    if (currentEmployee) {
+      setEmployee(currentEmployee);
+    }
+  }, [currentEmployee]);
+  
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -63,12 +82,33 @@ const EmployeeForm: React.FC = () => {
     // Clear errors when user starts typing
     dispatch(clearErrors());
   };
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(createEmployee(employee));
+    setIsLoading(true);
+    
+    // Make sure to include the ID
+    const employeeWithId = {
+      ...employee,
+      id: parseInt(id as string)
+    };
+    
+    dispatch(updateEmployee(employeeWithId))
+      .unwrap()
+      .then(() => {
+        setIsLoading(false);
+        // Navigate to the details page after successful update
+        navigate(`/employees/${id}`);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
-
+  
+  const handleCancel = () => {
+    navigate(`/employees/${id}`);
+  };
+  
   const getFieldError = (fieldName: string): string => {
     if (!validationErrors) return "";
 
@@ -81,10 +121,18 @@ const EmployeeForm: React.FC = () => {
 
     return validationErrors[fieldName] || "";
   };
-
+  
+  if (status === "loading" && !currentEmployee) {
+    return <div className={styles["loading"]}>Loading employee data...</div>;
+  }
+  
+  if (status === "failed" && !currentEmployee) {
+    return <div className={styles["error"]}>{error || "Failed to load employee"}</div>;
+  }
+  
   return (
-    <div className={styles["employee-form"]}>
-      <h2>Add New Employee</h2>
+    <div className={styles["edit-employee"]}>
+      <h2>Edit Employee</h2>
 
       {error && <div className={styles["error-message"]}>{error}</div>}
 
@@ -309,10 +357,10 @@ const EmployeeForm: React.FC = () => {
           </div>
 
           <div className={styles["form-group"]}>
-            <label htmlFor="contracType">Contract Type*</label>
+            <label htmlFor="contractType">Contract Type*</label>
             <select
-              id="contracType"
-              name="contracType"
+              id="contractType"
+              name="contractType"
               value={employee.contractType}
               onChange={handleChange}
               required
@@ -323,28 +371,25 @@ const EmployeeForm: React.FC = () => {
                 </option>
               ))}
             </select>
-            {getFieldError("contracType") && (
+            {getFieldError("contractType") && (
               <div className={styles["field-error"]}>
-                {getFieldError("contracType")}
+                {getFieldError("contractType")}
               </div>
             )}
           </div>
         </div>
 
         <div className={styles["form-actions"]}>
-          <button type="submit" disabled={status === "loading"}>
-            {status === "loading" ? "Submitting..." : "Add Employee"}
+          <button type="button" onClick={handleCancel} className={styles["cancel-button"]}>
+            Cancel
+          </button>
+          <button type="submit" disabled={isLoading} className={styles["save-button"]}>
+            {isLoading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </form>
-
-      {status === "succeeded" && (
-        <div className={styles["success-message"]}>
-          Employee added successfully!
-        </div>
-      )}
     </div>
   );
 };
 
-export default EmployeeForm;
+export default EditEmployee;
